@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Science Institute - Swapnil Urade Sir | Bhandara</title>
+<link rel="icon" type="image/png" href="images/si-logo.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Merriweather:wght@700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --orange:#F97316;--orange-light:#FFF7ED;--orange-dark:#C2410C;
+  --navy:#0F172A;--navy-mid:#1E3A5F;--white:#FFFFFF;
+  --gray-bg:#F8FAFC;--gray-text:#64748B;--gray-border:#E2E8F0;
+  --cyan:#00bcd4;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;color:var(--navy);background:var(--white);}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;background:var(--navy);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;height:62px;box-shadow:0 2px 12px rgba(0,0,0,0.18);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--cyan);}
+.nav-logo .name{color:var(--white);font-weight:800;font-size:17px;}
+.nav-links{display:flex;gap:24px;list-style:none;}
+.nav-links a{color:#CBD5E1;text-decoration:none;font-size:14px;font-weight:600;transition:color 0.2s;}
+.nav-links a:hover{color:var(--orange);}
+.nav-cta{background:var(--orange);color:var(--white);border:none;border-radius:8px;padding:8px 18px;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;transition:background 0.2s;}
+.nav-cta:hover{background:var(--orange-dark);}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,#1a4a7a 100%);
+  padding:64px 5% 54px;display:flex;align-items:center;
+  justify-content:space-between;flex-wrap:wrap;gap:32px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:360px;height:360px;border-radius:50%;
+  background:rgba(249,115,22,0.08);pointer-events:none;
+}
+.hero-text{flex:1;min-width:280px;position:relative;z-index:2;}
+.hero-badge{
+  display:inline-block;background:var(--orange);color:var(--white);
+  font-weight:800;font-size:13px;letter-spacing:1px;
+  padding:5px 14px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;
+}
+.hero-text h1{font-family:'Merriweather',serif;font-size:clamp(26px,4vw,44px);color:var(--white);line-height:1.2;margin-bottom:8px;}
+.hero-text h1 span{color:var(--orange);}
+.hero-sub{font-size:15px;color:#94A3B8;margin-bottom:6px;font-weight:600;}
+.hero-tagline{font-size:13px;color:var(--cyan);margin-bottom:14px;font-weight:600;font-style:italic;}
+.hero-classes{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
+.hero-classes span{background:rgba(249,115,22,0.15);color:var(--orange);border:1px solid rgba(249,115,22,0.3);padding:5px 14px;border-radius:20px;font-weight:700;font-size:14px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-primary{background:var(--orange);color:var(--white);padding:12px 26px;border-radius:10px;font-weight:800;font-size:15px;text-decoration:none;border:none;cursor:pointer;transition:background 0.2s,transform 0.15s;display:inline-block;}
+.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);}
+.btn-outline{background:transparent;color:var(--white);padding:12px 26px;border-radius:10px;font-weight:700;font-size:15px;text-decoration:none;border:1.5px solid rgba(255,255,255,0.3);cursor:pointer;transition:border-color 0.2s,transform 0.15s;display:inline-block;}
+.btn-outline:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-1px);}
+
+/* SLIDESHOW CARD - flex column so caption sits below photo */
+.slideshow-card{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:20px;overflow:hidden;
+  min-width:240px;width:260px;flex-shrink:0;
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;
+}
+
+/* PHOTO AREA - fixed height, caption NOT inside here */
+.slideshow{
+  position:relative;width:100%;height:280px;overflow:hidden;flex-shrink:0;
+}
+.slideshow-slide{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  opacity:0;transition:opacity 0.8s ease-in-out;
+}
+.slideshow-slide.active{opacity:1;}
+.slideshow-slide img{
+  width:100%;height:100%;object-fit:cover;object-position:top center;display:block;
+}
+
+/* DOTS inside photo area */
+.slide-dots{
+  position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:5;
+}
+.slide-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,0.5);cursor:pointer;
+  transition:background 0.3s,transform 0.3s;border:none;
+}
+.slide-dot.active{background:#fff;transform:scale(1.2);}
+
+/* CAPTION below photo - never overlaps */
+.slide-caption{
+  padding:12px 16px;
+  background:rgba(10,18,36,0.9);
+  flex-shrink:0;
+  min-height:68px;
+  display:none;
+}
+.slide-caption.active-caption{display:block;}
+.slide-caption h3{color:var(--white);font-size:15px;font-weight:800;margin-bottom:2px;}
+.slide-caption p{color:#94A3B8;font-size:12px;}
+.gold-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(234,179,8,0.2);border:1px solid rgba(234,179,8,0.4);
+  color:#FCD34D;font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:20px;margin-top:5px;
+}
+
+/* STATS */
+.stats-bar{background:var(--orange);display:flex;justify-content:space-around;flex-wrap:wrap;padding:20px 5%;gap:12px;}
+.stat{text-align:center;color:var(--white);}
+.stat-num{font-size:26px;font-weight:900;line-height:1;}
+.stat-label{font-size:12px;font-weight:600;opacity:0.85;margin-top:2px;}
+
+/* SECTIONS */
+section{padding:60px 5%;}
+.section-label{font-size:13px;font-weight:700;letter-spacing:2px;color:var(--orange);text-transform:uppercase;margin-bottom:8px;}
+.section-title{font-size:clamp(20px,3vw,30px);font-weight:800;color:var(--navy);margin-bottom:8px;}
+.section-sub{font-size:15px;color:var(--gray-text);margin-bottom:36px;max-width:540px;}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+.about-card{background:var(--gray-bg);border-radius:14px;padding:20px 18px;}
+.about-card .icon{font-size:24px;margin-bottom:10px;}
+.about-card h4{font-size:15px;font-weight:800;margin-bottom:6px;}
+.about-card p{font-size:13px;color:var(--gray-text);line-height:1.6;}
+
+/* COURSES */
+.courses-bg{background:var(--gray-bg);}
+.courses-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+.course-card{background:var(--white);border:1.5px solid var(--gray-border);border-radius:16px;padding:28px 22px;transition:transform 0.2s,box-shadow 0.2s;border-top:4px solid transparent;}
+.course-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(0,0,0,0.09);}
+.course-card.physics{border-top-color:#8B5CF6;}
+.course-card.chemistry{border-top-color:#10B981;}
+.course-card.biology{border-top-color:#F97316;}
+.course-icon{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;}
+.physics .course-icon{background:#F5F3FF;}
+.chemistry .course-icon{background:#ECFDF5;}
+.biology .course-icon{background:#FFF7ED;}
+.course-card h3{font-size:17px;font-weight:800;margin-bottom:8px;}
+.course-card p{font-size:13px;color:var(--gray-text);line-height:1.6;}
+.course-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;}
+.course-tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--gray-bg);color:var(--gray-text);border:1px solid var(--gray-border);}
+
+/* BATCHES */
+.batches-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;}
+.batch-card{background:var(--white);border:1.5px solid var(--gray-border);border-radius:16px;overflow:hidden;}
+.batch-header{padding:14px 18px;display:flex;align-items:center;gap:10px;}
+.batch-header.morning{background:linear-gradient(135deg,#FEF3C7,#FDE68A);}
+.batch-header.afternoon{background:linear-gradient(135deg,#DBEAFE,#BFDBFE);}
+.batch-header.evening{background:linear-gradient(135deg,#EDE9FE,#DDD6FE);}
+.batch-header .icon{font-size:22px;}
+.batch-header h3{font-size:16px;font-weight:800;}
+.batch-rows{padding:14px 18px;display:flex;flex-direction:column;gap:10px;}
+.batch-row{display:flex;align-items:center;justify-content:space-between;}
+.batch-class{font-size:13px;font-weight:700;color:var(--navy);}
+.batch-time{font-size:12px;font-weight:700;color:var(--orange-dark);background:var(--orange-light);padding:4px 10px;border-radius:20px;}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+.feature-card{background:var(--white);border:1.5px solid var(--gray-border);border-radius:14px;padding:20px 18px;text-align:center;}
+.feature-card .icon{font-size:28px;margin-bottom:10px;}
+.feature-card h4{font-size:14px;font-weight:800;margin-bottom:5px;}
+.feature-card p{font-size:12px;color:var(--gray-text);line-height:1.5;}
+
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;}
+.testi-card{background:var(--white);border:1px solid var(--gray-border);border-radius:16px;padding:24px 20px;}
+.stars{color:#FBBF24;font-size:14px;margin-bottom:10px;}
+.testi-card p{font-size:14px;color:#374151;line-height:1.65;margin-bottom:16px;}
+.testi-author{display:flex;align-items:center;gap:10px;}
+.testi-initials{width:36px;height:36px;border-radius:50%;background:var(--orange);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
+.testi-name{font-size:14px;font-weight:700;}
+.testi-class{font-size:12px;color:var(--gray-text);}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+@media(max-width:680px){.contact-grid{grid-template-columns:1fr;}}
+.contact-info h3{font-size:20px;font-weight:800;margin-bottom:16px;}
+.contact-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;}
+.contact-ico{width:42px;height:42px;border-radius:10px;background:var(--orange-light);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.contact-row h4{font-size:13px;color:var(--gray-text);font-weight:600;margin-bottom:2px;}
+.contact-row p{font-size:15px;font-weight:700;}
+.contact-form{background:var(--gray-bg);border-radius:16px;padding:28px 24px;}
+.contact-form h3{font-size:18px;font-weight:800;margin-bottom:20px;}
+.form-group{margin-bottom:14px;}
+.form-group label{display:block;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:5px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid var(--gray-border);font-family:'Nunito',sans-serif;font-size:14px;color:var(--navy);background:var(--white);outline:none;transition:border-color 0.2s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--orange);}
+.form-group textarea{resize:vertical;min-height:90px;}
+.form-submit{width:100%;background:var(--orange);color:var(--white);border:none;border-radius:10px;padding:13px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:background 0.2s;margin-top:4px;}
+.form-submit:hover{background:var(--orange-dark);}
+.success-msg{display:none;background:#DCFCE7;color:#166534;border-radius:10px;padding:12px 16px;font-weight:700;font-size:14px;margin-top:12px;text-align:center;}
+
+/* ADMISSION BANNER */
+.admission-banner{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);padding:50px 5%;text-align:center;color:var(--white);}
+.admission-banner h2{font-size:clamp(20px,3vw,30px);font-weight:900;margin-bottom:10px;}
+.admission-banner p{font-size:16px;opacity:0.9;margin-bottom:24px;}
+.btn-white{background:var(--white);color:var(--orange-dark);padding:13px 32px;border-radius:10px;font-weight:800;font-size:15px;text-decoration:none;border:none;cursor:pointer;display:inline-block;transition:transform 0.15s;}
+.btn-white:hover{transform:translateY(-2px);}
+
+/* FOOTER */
+footer{background:var(--navy);color:#94A3B8;text-align:center;padding:28px 5%;font-size:13px;}
+footer strong{color:var(--white);}
+.footer-links{display:flex;justify-content:center;gap:20px;margin-bottom:12px;flex-wrap:wrap;}
+.footer-links a{color:#94A3B8;text-decoration:none;font-size:13px;}
+.footer-links a:hover{color:var(--orange);}
+.footer-dev{margin-top:10px;font-size:12px;color:#475569;}
+.footer-dev a{color:var(--cyan);text-decoration:none;font-weight:700;}
+
+@media(max-width:600px){.nav-links{display:none;}.hero{padding:50px 5% 40px;}.slideshow-card{width:100%;}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="images/si-logo.png" alt="Si Logo"/>
+    <span class="name">Science Institute</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#courses">Subjects</a></li>
+    <li><a href="#batches">Batches</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Enroll Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-badge">Admissions Open 2026-27</div>
+    <h1>Science Institute<br/><span>Swapnil Urade Sir</span></h1>
+    <p class="hero-sub">M.Sc, B.Ed. Gold Medalist &nbsp;|&nbsp; Ex. Navodian &nbsp;|&nbsp; 12 Yr. Exp.</p>
+    <p class="hero-tagline">Specialised Coaching for Subject Science</p>
+    <div class="hero-classes">
+      <span>CBSE 8th</span><span>CBSE 9th</span><span>CBSE 10th</span>
+    </div>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Enroll Now</a>
+      <a href="tel:+918857890189" class="btn-outline">Call Us</a>
+    </div>
+  </div>
+
+  <!-- SLIDESHOW: photo on top, caption below — no overlap -->
+  <div class="slideshow-card">
+
+    <!-- Photo area only -->
+    <div class="slideshow" id="slideshow">
+      <div class="slideshow-slide active">
+        <img src="images/swapnil-sir.jpg" alt="Swapnil Urade Sir"/>
+      </div>
+      <div class="slideshow-slide">
+        <img src="images/student-girl.jpg" alt="Student"/>
+      </div>
+      <div class="slideshow-slide">
+        <img src="images/banner1.jpg" alt="Banner 1"/>
+      </div>
+      <div class="slideshow-slide">
+        <img src="images/banner2.jpg" alt="Banner 2"/>
+      </div>
+      <!-- Dots -->
+      <div class="slide-dots">
+        <button class="slide-dot active" onclick="goToSlide(0)"></button>
+        <button class="slide-dot" onclick="goToSlide(1)"></button>
+        <button class="slide-dot" onclick="goToSlide(2)"></button>
+        <button class="slide-dot" onclick="goToSlide(3)"></button>
+      </div>
+    </div>
+
+    <!-- Captions below photo — change with JS -->
+    <div class="slide-caption active-caption" id="cap-0">
+      <h3>Swapnil Urade Sir</h3>
+      <p>M.Sc, B.Ed. Gold Medalist</p>
+      <div class="gold-badge">&#9733; Ex. Navodian &nbsp;|&nbsp; 12 Yr. Exp.</div>
+    </div>
+    <div class="slide-caption" id="cap-1">
+      <h3>3000+ Students Taught</h3>
+      <p>100% Pass Result Ratio</p>
+    </div>
+    <div class="slide-caption" id="cap-2">
+      <h3>Admissions Open 2026-27</h3>
+      <p>CBSE 8th, 9th and 10th</p>
+    </div>
+    <div class="slide-caption" id="cap-3">
+      <h3>High Tech Digital Classroom</h3>
+      <p>AC Classroom &nbsp;|&nbsp; 24x7 CCTV</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">3000+</div><div class="stat-label">Students Taught</div></div>
+  <div class="stat"><div class="stat-num">3</div><div class="stat-label">Science Subjects</div></div>
+  <div class="stat"><div class="stat-num">3</div><div class="stat-label">Daily Batches</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Pass Result Ratio</div></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">About Us</div>
+  <div class="section-title">Why Choose Science Institute?</div>
+  <p class="section-sub">Led by Swapnil Urade Sir — a Gold Medalist and Ex. Navodian with 12 years of dedicated experience in Science education.</p>
+  <div class="about-grid">
+    <div class="about-card"><div class="icon">&#127891;</div><h4>Expert Faculty</h4><p>Gold Medalist educator with 12 years of experience. Ex. Navodian background ensures top quality teaching.</p></div>
+    <div class="about-card"><div class="icon">&#128300;</div><h4>Science Specialist</h4><p>Specialised coaching exclusively for Science — Physics, Chemistry and Biology taught in depth.</p></div>
+    <div class="about-card"><div class="icon">&#128221;</div><h4>Weekly Test Pattern</h4><p>Regular weekly tests and revision sessions to keep students exam-ready all year round.</p></div>
+    <div class="about-card"><div class="icon">&#128175;</div><h4>100% Pass Result</h4><p>Not a single student has failed. Our track record of 3000+ students speaks for itself.</p></div>
+  </div>
+</section>
+
+<!-- SUBJECTS -->
+<section id="courses" class="courses-bg">
+  <div class="section-label">Our Subjects</div>
+  <div class="section-title">Science Subjects Covered</div>
+  <p class="section-sub">Specialised coaching for CBSE 8th, 9th and 10th — Physics, Chemistry and Biology taught with depth and clarity.</p>
+  <div class="courses-grid">
+    <div class="course-card physics">
+      <div class="course-icon">&#9889;</div>
+      <h3>Physics</h3>
+      <p>Forces, motion, electricity, light and energy — explained through real-world examples and concept-based learning.</p>
+      <div class="course-tags"><span class="course-tag">Motion</span><span class="course-tag">Electricity</span><span class="course-tag">Optics</span><span class="course-tag">Energy</span></div>
+    </div>
+    <div class="course-card chemistry">
+      <div class="course-icon">&#129514;</div>
+      <h3>Chemistry</h3>
+      <p>Atoms, molecules, periodic table and chemical reactions — made simple and scoring for every student.</p>
+      <div class="course-tags"><span class="course-tag">Periodic Table</span><span class="course-tag">Reactions</span><span class="course-tag">Acids and Bases</span></div>
+    </div>
+    <div class="course-card biology">
+      <div class="course-icon">&#127807;</div>
+      <h3>Biology</h3>
+      <p>Life processes, heredity, ecosystems and human physiology explained clearly for board exam excellence.</p>
+      <div class="course-tags"><span class="course-tag">Life Processes</span><span class="course-tag">Genetics</span><span class="course-tag">Ecosystem</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- BATCHES -->
+<section id="batches">
+  <div class="section-label">Batch Timings</div>
+  <div class="section-title">Flexible Batch Schedule</div>
+  <p class="section-sub">Choose a batch that fits your schedule — Morning, Afternoon or Evening, all available daily.</p>
+  <div class="batches-grid">
+    <div class="batch-card">
+      <div class="batch-header morning"><div class="icon">&#127749;</div><h3>Morning Batch</h3></div>
+      <div class="batch-rows">
+        <div class="batch-row"><span class="batch-class">9th Class</span><span class="batch-time">6:45 AM – 7:40 AM</span></div>
+      </div>
+    </div>
+    <div class="batch-card">
+      <div class="batch-header afternoon"><div class="icon">&#9728;&#65039;</div><h3>Afternoon Batch</h3></div>
+      <div class="batch-rows">
+        <div class="batch-row"><span class="batch-class">9th Class</span><span class="batch-time">3:45 PM – 4:35 PM</span></div>
+        <div class="batch-row"><span class="batch-class">10th Class</span><span class="batch-time">4:40 PM – 5:40 PM</span></div>
+      </div>
+    </div>
+    <div class="batch-card">
+      <div class="batch-header evening"><div class="icon">&#127750;</div><h3>Evening Batch</h3></div>
+      <div class="batch-rows">
+        <div class="batch-row"><span class="batch-class">9th Class</span><span class="batch-time">5:40 PM – 6:30 PM</span></div>
+        <div class="batch-row"><span class="batch-class">8th Class</span><span class="batch-time">6:35 PM – 7:30 PM</span></div>
+        <div class="batch-row"><span class="batch-class">10th Class</span><span class="batch-time">7:30 PM – 8:20 PM</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" style="background:var(--gray-bg);">
+  <div class="section-label">Our Features</div>
+  <div class="section-title">What Makes Us Different</div>
+  <p class="section-sub">State-of-the-art facilities combined with experienced teaching for the best learning environment.</p>
+  <div class="features-grid">
+    <div class="feature-card"><div class="icon">&#128187;</div><h4>High Tech Digital Classroom with AC</h4><p>Modern digital classroom with full air conditioning for comfortable learning.</p></div>
+    <div class="feature-card"><div class="icon">&#128249;</div><h4>24x7 CCTV Surveillance</h4><p>Round-the-clock CCTV monitoring for a safe and secure environment for all students.</p></div>
+    <div class="feature-card"><div class="icon">&#128176;</div><h4>Affordable Fees Structure</h4><p>Quality education at fees every family can afford. No compromise on teaching quality.</p></div>
+    <div class="feature-card"><div class="icon">&#128203;</div><h4>Weekly Test Pattern</h4><p>Structured weekly tests to track progress and keep students board-exam ready.</p></div>
+    <div class="feature-card"><div class="icon">&#127942;</div><h4>Highly Experienced Faculty</h4><p>12 years of Science teaching with Gold Medal and Ex. Navodian background.</p></div>
+    <div class="feature-card"><div class="icon">&#128300;</div><h4>Practical Guidelines</h4><p>Simple explanations with practical examples to make every concept crystal clear.</p></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-label">Student Reviews</div>
+  <div class="section-title">What Our Students Say</div>
+  <p class="section-sub">Real feedback from students who excelled with the guidance of Swapnil Urade Sir.</p>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p>"Swapnil Sir explains every concept so simply. My Science marks went from 58 to 92 this year. The digital classroom is amazing!"</p>
+      <div class="testi-author"><div class="testi-initials">RP</div><div><div class="testi-name">Rahul Patil</div><div class="testi-class">Class 10 Student</div></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p>"The weekly tests really helped me prepare. Chemistry and Biology became my favourite subjects after joining this institute!"</p>
+      <div class="testi-author"><div class="testi-initials">PS</div><div><div class="testi-name">Priya Sharma</div><div class="testi-class">Class 9 Student</div></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p>"My son scored 95% in Science board exams. The affordable fees and excellent teaching make this the best institute in Bhandara."</p>
+      <div class="testi-author"><div class="testi-initials">SM</div><div><div class="testi-name">Sunita Mahajan</div><div class="testi-class">Parent of Class 10 Student</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMISSION BANNER -->
+<div class="admission-banner">
+  <h2>Admissions Open for 2026-27!</h2>
+  <p>Limited seats available. Enroll today to secure your child's future in Science.</p>
+  <a href="#contact" class="btn-white">Register Your Child Now</a>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Get In Touch</div>
+  <div class="section-title">Contact and Enroll</div>
+  <p class="section-sub">Reach out to Swapnil Urade Sir directly or fill the form below.</p>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h3>Contact Details</h3>
+      <div class="contact-row">
+        <div class="contact-ico">&#128222;</div>
+        <div><h4>Phone / WhatsApp (Swapnil Sir)</h4><p><a href="tel:+918857890189" style="color:var(--navy);text-decoration:none;">+91 88578 90189</a></p></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-ico">&#128222;</div>
+        <div><h4>Staff Contact</h4><p><a href="tel:+918668394397" style="color:var(--navy);text-decoration:none;">+91 86683 94397</a></p></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-ico">&#128104;&#8205;&#127979;</div>
+        <div><h4>Faculty</h4><p>Swapnil Urade Sir — M.Sc, B.Ed. Gold Medalist</p></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-ico">&#128205;</div>
+        <div><h4>Address</h4><p>Science Institute, Vaishali Nagar,<br/>I-Jal RO Plant Gali, Khat Road,<br/>Bhandara – 441904</p></div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-ico">&#9200;</div>
+        <div><h4>Batch Timings</h4><p>Morning, Afternoon and Evening Batches Available</p></div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <h3>Enquiry Form</h3>
+      <div class="form-group"><label>Student Name</label><input type="text" placeholder="Enter student's full name" id="f-name"/></div>
+      <div class="form-group"><label>Parent's Mobile Number</label><input type="tel" placeholder="+91 XXXXX XXXXX" id="f-phone"/></div>
+      <div class="form-group"><label>Class</label>
+        <select id="f-class"><option value="">Select Class</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select>
+      </div>
+      <div class="form-group"><label>Preferred Batch</label>
+        <select id="f-batch"><option value="">Select Batch</option><option>Morning Batch</option><option>Afternoon Batch</option><option>Evening Batch</option></select>
+      </div>
+      <div class="form-group"><label>Message (Optional)</label><textarea placeholder="Any questions or requirements…" id="f-msg"></textarea></div>
+      <button class="form-submit" onclick="submitForm()">Submit Enquiry via WhatsApp</button>
+      <div class="success-msg" id="success-msg">Thank you! We will contact you on WhatsApp shortly.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="#about">About</a><a href="#courses">Subjects</a>
+    <a href="#batches">Batches</a><a href="#features">Features</a>
+    <a href="#testimonials">Reviews</a><a href="#contact">Contact</a>
+  </div>
+  <p>&copy; 2026 <strong>Science Institute</strong> — Swapnil Urade Sir &nbsp;|&nbsp; +91 88578 90189, +91 86683 94397 &nbsp;|&nbsp; Bhandara – 441904</p>
+  <p class="footer-dev">Designed and Developed by <a href="#">Niktevia Technology</a></p>
+</footer>
+
+<script>
+var current = 0;
+var total = 4;
+var timer;
+
+function goToSlide(n) {
+  // Hide current slide and caption
+  document.querySelectorAll('.slideshow-slide')[current].classList.remove('active');
+  document.querySelectorAll('.slide-dot')[current].classList.remove('active');
+  document.getElementById('cap-' + current).classList.remove('active-caption');
+
+  // Show new slide and caption
+  current = n;
+  document.querySelectorAll('.slideshow-slide')[current].classList.add('active');
+  document.querySelectorAll('.slide-dot')[current].classList.add('active');
+  document.getElementById('cap-' + current).classList.add('active-caption');
+}
+
+function nextSlide() {
+  goToSlide((current + 1) % total);
+}
+
+// Start auto-play every 2 seconds
+timer = setInterval(nextSlide, 2000);
+
+// Pause on hover, resume on mouse leave
+document.getElementById('slideshow').addEventListener('mouseenter', function() {
+  clearInterval(timer);
+});
+document.getElementById('slideshow').addEventListener('mouseleave', function() {
+  timer = setInterval(nextSlide, 2000);
+});
+
+// WhatsApp enquiry form
+function submitForm() {
+  var name = document.getElementById('f-name').value.trim();
+  var phone = document.getElementById('f-phone').value.trim();
+  var cls = document.getElementById('f-class').value;
+  if (!name || !phone || !cls) {
+    alert('Please fill in Name, Mobile Number, and Class.');
+    return;
+  }
+  var msg = encodeURIComponent(
+    'Hello Swapnil Sir,\nEnquiry for admission at Science Institute.\n\n' +
+    'Student Name: ' + name + '\nClass: ' + cls +
+    '\nBatch: ' + (document.getElementById('f-batch').value || 'Not specified') +
+    '\nMessage: ' + (document.getElementById('f-msg').value || 'None')
+  );
+  window.open('https://wa.me/918857890189?text=' + msg, '_blank');
+  document.getElementById('success-msg').style.display = 'block';
+}
+</script>
+</body>
+</html>
